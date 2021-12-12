@@ -1,8 +1,7 @@
-FROM node:14.17-alpine
+FROM node:14
 
-RUN apk update && apk add python3 g++ make && rm -rf /var/cache/apk/*
-RUN mkdir -p /home/app/ && chown -R node:node /home/app
-WORKDIR /home/app
+RUN mkdir -p /app/ && chown -R node:node /app
+WORKDIR /app
 COPY --chown=node:node . .
 
 USER node

@@ -10,9 +10,5 @@ jobs:
         run: |
           docker-compose up -d
           docker container ls
-      - name: List scripts
-        run: docker-compose exec -T web yarn lint:scripts
-      - name: List styles
-        run: docker-compose exec -T web yarn lint:styles
-      - name: List format
-        run: docker-compose exec -T web yarn lint:format
+      - name: Lint
+        run: docker-compose exec -T web yarn lint

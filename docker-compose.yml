@@ -1,26 +1,11 @@
 version: "3"
 
 services:
-  web:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: web
-    restart: always
-    volumes:
-      - ./:/usr/src/app
-    ports:
-      - "3000:3000"
-    depends_on:
-      mongo:
-        condition: service_healthy
 
   mongo:
     container_name: mongo
     image: mongo
     restart: always
-    volumes:
-      - ./data:/data/db
     ports:
       - "27017:27017"
     healthcheck:
@@ -29,14 +14,29 @@ services:
       timeout: 10s
       start_period: 5s
 
+  web:
+    user: root
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: web
+    restart: always
+    volumes:
+      - ./:/app
+    ports:
+      - "3000:3000"
+    depends_on:
+      mongo:
+        condition: service_healthy
+
   mongo_seed:
     image: mongo
     links:
       - mongo
     volumes:
-      - ./:/usr/src/app
+      - ./mongo:/mongo
     command:
-      /usr/src/app/mongo/import.sh
+      /mongo/import.sh
     depends_on:
       mongo:
         condition: service_healthy
